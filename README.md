@@ -47,25 +47,20 @@ cd apps/web && npm test
 
 Nginx was pointing at `/var/www/crandell.io/public`, but nothing had been built there, so every request returned **404**. The Next app is configured for **`output: "export"`** so it can be served as plain files (no Node on the server).
 
-From the repo root:
+From the repo root (build static export, then copy to your nginx docroot, e.g. `public/`):
 
 ```bash
 export NEXT_PUBLIC_API_URL=https://crandell.io   # or your API host
-./scripts/deploy-static.sh
-sudo nginx -t && sudo systemctl reload nginx   # if you changed nginx
+cd apps/web && npm install && npm run build
+rm -rf ../public && mkdir -p ../public && cp -a out/. ../public/
+cd .. && sudo nginx -t && sudo systemctl reload nginx   # if you changed nginx
 ```
 
-That copies `apps/web/out/` → `public/`, which nginx serves as the document root.
+That mirrors `apps/web/out/` into the docroot nginx serves.
 
 **API on the same domain (fixes 404 HTML from nginx when moving sliders):** the UI POSTs to `https://crandell.io/simulate`. Nginx must **proxy** that to FastAPI.
 
-**One command (requires sudo password once):** installs `python3-venv`, creates the API venv, enables [`deploy/policy-api.service`](deploy/policy-api.service), patches nginx, reloads:
-
-```bash
-sudo bash /var/www/crandell.io/scripts/apply-full-stack.sh
-```
-
-Manual steps are still documented in [`deploy/snippets/crandell-api-proxy.conf`](deploy/snippets/crandell-api-proxy.conf) if you prefer not to use the script.
+On the server: install [`deploy/snippets/crandell-api-proxy.conf`](deploy/snippets/crandell-api-proxy.conf) into `/etc/nginx/snippets/`, include it in your `server { }` block (before `location /`), copy [`deploy/policy-api.service`](deploy/policy-api.service) to `/etc/systemd/system/`, create a venv under `apps/api`, `pip install -r apps/api/requirements.txt`, point `ExecStart` at `.venv/bin/uvicorn`, then `sudo systemctl daemon-reload && sudo systemctl enable --now policy-api` and reload nginx.
 
 **Check:** `curl -sS https://crandell.io/health` → `{"status":"ok"}`.
 
