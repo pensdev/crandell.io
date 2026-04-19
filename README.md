@@ -57,7 +57,17 @@ sudo nginx -t && sudo systemctl reload nginx   # if you changed nginx
 
 That copies `apps/web/out/` → `public/`, which nginx serves as the document root.
 
-**API on the same domain:** run uvicorn on `127.0.0.1:8000` and merge the `location` blocks from [`deploy/crandell.io-api-locations.conf`](deploy/crandell.io-api-locations.conf) into your `server { ... }` for `crandell.io` (above `location /`). Set `ALLOWED_ORIGINS` on the API to include `https://crandell.io`.
+**API on the same domain (fixes 404 HTML from nginx when moving sliders):** the UI POSTs to `https://crandell.io/simulate`. Nginx must **proxy** that to FastAPI.
+
+**One command (requires sudo password once):** installs `python3-venv`, creates the API venv, enables [`deploy/policy-api.service`](deploy/policy-api.service), patches nginx, reloads:
+
+```bash
+sudo bash /var/www/crandell.io/scripts/apply-full-stack.sh
+```
+
+Manual steps are still documented in [`deploy/snippets/crandell-api-proxy.conf`](deploy/snippets/crandell-api-proxy.conf) if you prefer not to use the script.
+
+**Check:** `curl -sS https://crandell.io/health` → `{"status":"ok"}`.
 
 ## Deployment
 

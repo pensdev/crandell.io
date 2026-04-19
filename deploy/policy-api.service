@@ -1,0 +1,21 @@
+[Unit]
+Description=Policy Impact Simulator API (FastAPI)
+After=network.target
+
+[Service]
+Type=simple
+# Use the account that owns the repo and has `pip install -r requirements.txt` applied.
+User=projectuser
+Group=projectuser
+WorkingDirectory=/var/www/crandell.io/apps/api
+Environment=ALLOWED_ORIGINS=https://crandell.io,https://www.crandell.io
+Environment=PYTHONPATH=/var/www/crandell.io/apps/api
+Environment=PYTHONUNBUFFERED=1
+# First import of pandas/numpy can take a while on a cold start.
+TimeoutStartSec=120
+ExecStart=/var/www/crandell.io/apps/api/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
