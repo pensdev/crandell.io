@@ -1,0 +1,14 @@
+# Render Blueprint — set repo root to this monorepo and use apps/api as the service root,
+# or paste this into the Render dashboard with Root Directory = apps/api.
+
+services:
+  - type: web
+    name: policy-impact-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    envVars:
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "120"

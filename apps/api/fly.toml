@@ -1,0 +1,20 @@
+# flyctl launch — run from apps/api so paths resolve, or set build.dockerfile
+
+app = "policy-impact-api"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+
+[[http_service.checks]]
+  interval = "15s"
+  timeout = "2s"
+  grace_period = "5s"
+  method = "GET"
+  path = "/health"

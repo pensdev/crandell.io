@@ -1,0 +1,11 @@
+metric,value,unit,notes
+federal_receipts_trillions_fy2024,4.9,trillions USD,illustrative round number for FY24-style receipts
+federal_outlays_trillions_fy2024,6.4,trillions USD,illustrative outlays
+gdp_nominal_trillions_2024,28.0,trillions USD,BEA-style nominal GDP magnitude
+income_tax_share_of_receipts,0.48,fraction,individual+estate components grouped
+corp_tax_share_of_receipts,0.09,fraction,
+payroll_tax_share_of_receipts,0.34,fraction,
+elasticity_revenue_to_top_rate,-0.15,semi-elasticity,illustrative static+feedback
+elasticity_gdp_to_primary_deficit,-0.25,ratio,illustrative year-5 level effect per 1pp GDP impulse
+revenue_feedback_income_tax,0.35,fraction,share of income tax change that feeds back to GDP
+tariff_revenue_share_import_base,0.02,fraction,rough share of imports in GDP for scoring

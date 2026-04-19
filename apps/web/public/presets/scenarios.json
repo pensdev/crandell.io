@@ -1,0 +1,40 @@
+{
+  "version": "1",
+  "scenarios": [
+    {
+      "id": "baseline",
+      "title": "Baseline (stylized)",
+      "summary": "No policy deltas relative to the model’s illustrative FY24-style baseline.",
+      "assumptions": [
+        "Uses rounded public-order-of-magnitude receipts, outlays, and GDP from SOURCES.md.",
+        "Not a reproduction of any official CBO or JCT score."
+      ]
+    },
+    {
+      "id": "tcja_sunset_2026",
+      "title": "TCJA sunset (full, 2026)",
+      "summary": "Assumes key individual provisions tied to the Tax Cuts and Jobs Act phase out in 2026 with full depth in this toy model.",
+      "assumptions": [
+        "Sunset depth maps to a stylized increase in individual income tax receipts; combined with a modest top-rate adjustment in the preset.",
+        "Year weighting is illustrative only—compare multiple sunset years in the API preset list."
+      ]
+    },
+    {
+      "id": "tcja_sunset_2026_partial",
+      "title": "TCJA sunset (partial, 2026)",
+      "summary": "Same sunset year with partial provision expiration—smaller revenue effect than full sunset in the toy model.",
+      "assumptions": [
+        "Partial depth uses an internal scalar (see API presets) and is not calibrated to a specific legislative text."
+      ]
+    },
+    {
+      "id": "trump_platinum_card",
+      "title": "Trump Platinum Card (illustrative)",
+      "summary": "Named scenario blending a luxury consumption fee, higher tariff proxy, lighter regulatory burden index, and a small individual rate tweak.",
+      "assumptions": [
+        "Tariff and luxury fee levers are proxies for average effective changes, not product-level schedules.",
+        "Regulatory index is a scalar compliance-cost shifter, not a Federal Register rule count."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+quintile,income_share,tax_burden_share,marginal_exposure_to_top_rate
+Q1,0.03,0.02,0.02
+Q2,0.08,0.05,0.05
+Q3,0.14,0.09,0.08
+Q4,0.22,0.16,0.15
+Q5,0.53,0.68,0.70
