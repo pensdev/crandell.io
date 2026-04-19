@@ -64,13 +64,9 @@ On the server: install [`deploy/snippets/crandell-api-proxy.conf`](deploy/snippe
 
 **Check:** `curl -sS https://crandell.io/health` → `{"status":"ok"}`.
 
-## Deployment
+Set **`NEXT_PUBLIC_API_URL=https://crandell.io`** (or your site origin) **before** `npm run build` so the static export calls the API on the same host. If the API lives only on another machine, use that origin instead and add it to **`ALLOWED_ORIGINS`** on the API.
 
-- **Vercel (frontend)**:
-  1. **Root Directory** must be **`apps/web`** (Project → Settings → General). If you import the repo root, Vercel will not find `next.config` / `package.json` for the app and the build will fail or produce the wrong output.
-  2. **Environment variables**: add **`NEXT_PUBLIC_API_URL`** = your public API base URL (no trailing slash), e.g. `https://policy-api.onrender.com`. Redeploy after saving.
-  3. **Preview URL shows `401 Unauthorized`**: that is usually **Deployment Protection** (team settings blocking unauthenticated access to preview deployments). Fix: Project → Settings → **Deployment Protection** → allow the deployment, **or** open the **Production** deployment URL instead of a preview alias, **or** sign in when Vercel prompts you.
-- **Render / Fly.io (API)**: use [`apps/api/Dockerfile`](apps/api/Dockerfile) or [`apps/api/render.yaml`](apps/api/render.yaml). Set **`ALLOWED_ORIGINS`** to your Vercel app origin(s), e.g. `https://your-app.vercel.app,https://crandell.io` (comma-separated, no spaces unless quoted per host).
+**Optional — API on Render or Fly.io** (frontend still on crandell.io): use [`apps/api/Dockerfile`](apps/api/Dockerfile) or [`apps/api/render.yaml`](apps/api/render.yaml). Set **`ALLOWED_ORIGINS`** to include `https://crandell.io` (and `https://www.crandell.io` if used). Point **`NEXT_PUBLIC_API_URL`** at that API URL when you build the static site.
 
 ## Data attribution
 

@@ -121,14 +121,12 @@ export default function Home() {
           className="border-b border-amber-600/50 bg-amber-950/40 px-6 py-3 text-center text-sm text-amber-100"
           role="status"
         >
-          <strong className="font-semibold">Backend URL not set.</strong> In
-          Vercel → Project → Settings → Environment Variables, add{" "}
+          <strong className="font-semibold">Backend URL not set.</strong> Build
+          the site with{" "}
           <code className="rounded bg-black/30 px-1">NEXT_PUBLIC_API_URL</code>{" "}
-          pointing to your deployed FastAPI origin (e.g.{" "}
-          <code className="rounded bg-black/30 px-1">
-            https://your-api.onrender.com
-          </code>
-          ), then redeploy.
+          set to your public API origin (for crandell.io on the same server, use{" "}
+          <code className="rounded bg-black/30 px-1">https://crandell.io</code>
+          ), then copy the static export to your nginx docroot again.
         </div>
       ) : null}
       <header className="border-b border-slate-800 bg-slate-950/80 px-6 py-8">
