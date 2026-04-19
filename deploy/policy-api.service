@@ -9,6 +9,9 @@ User=projectuser
 Group=projectuser
 WorkingDirectory=/var/www/crandell.io/apps/api
 Environment=ALLOWED_ORIGINS=https://crandell.io,https://www.crandell.io
+Environment=APP_VERSION=0.1.0
+# Set at deploy time, e.g. GIT_COMMIT=$(git rev-parse --short HEAD)
+Environment=GIT_COMMIT=unknown
 Environment=PYTHONPATH=/var/www/crandell.io/apps/api
 Environment=PYTHONUNBUFFERED=1
 # First import of pandas/numpy can take a while on a cold start.

@@ -33,15 +33,47 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000). Set `NEXT_PUBLIC_API_URL` in `.env.local` to your API origin.
 
+## CI
+
+GitHub Actions runs on push and pull requests to `main`/`master`:
+
+- **API**: `pytest` in [`apps/api`](apps/api)
+- **Web**: `npm run lint` and `npm test` in [`apps/web`](apps/web)
+- **E2E**: Playwright smoke test (starts API + `next dev`, hits the home page)
+
 ## Tests
 
 ```bash
-# API (from apps/api, with dependencies installed)
-pytest
+# API (from apps/api, with a venv and dependencies installed)
+cd apps/api && python3 -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt && pytest
 
-# Web
+# Web (unit)
 cd apps/web && npm test
+
+# Web (e2e — requires Chromium; starts servers automatically on ports 8010 / 3010)
+cd apps/web && npx playwright install chromium && npm run test:e2e
 ```
+
+On minimal Linux environments, if Chromium fails with a missing shared library (for example `libgbm.so.1`), install system dependencies (Debian/Ubuntu: `libgbm1` and related packages) or run `npx playwright install-deps` where available. GitHub Actions uses `playwright install chromium --with-deps`.
+
+## OpenAPI → TypeScript types
+
+After changing Pydantic models in the API, regenerate the contract and client types:
+
+```bash
+cd apps/web && npm run codegen:api
+```
+
+This writes [`apps/web/lib/openapi.json`](apps/web/lib/openapi.json) and [`apps/web/lib/api-types.generated.ts`](apps/web/lib/api-types.generated.ts). [`apps/web/lib/types.ts`](apps/web/lib/types.ts) re-exports schema types from the generated file.
+
+## API build metadata
+
+Set optional environment variables on the API host so `/health` exposes deploy context:
+
+- `APP_VERSION` — defaults to `0.1.0` if unset
+- `GIT_COMMIT` — short or full git SHA (defaults to `unknown`)
+
+[`deploy/policy-api.service`](deploy/policy-api.service) includes placeholders you can replace at deploy time.
 
 ## Self-hosted static site (crandell.io / nginx)
 
