@@ -43,6 +43,22 @@ pytest
 cd apps/web && npm test
 ```
 
+## Self-hosted static site (crandell.io / nginx)
+
+Nginx was pointing at `/var/www/crandell.io/public`, but nothing had been built there, so every request returned **404**. The Next app is configured for **`output: "export"`** so it can be served as plain files (no Node on the server).
+
+From the repo root:
+
+```bash
+export NEXT_PUBLIC_API_URL=https://crandell.io   # or your API host
+./scripts/deploy-static.sh
+sudo nginx -t && sudo systemctl reload nginx   # if you changed nginx
+```
+
+That copies `apps/web/out/` → `public/`, which nginx serves as the document root.
+
+**API on the same domain:** run uvicorn on `127.0.0.1:8000` and merge the `location` blocks from [`deploy/crandell.io-api-locations.conf`](deploy/crandell.io-api-locations.conf) into your `server { ... }` for `crandell.io` (above `location /`). Set `ALLOWED_ORIGINS` on the API to include `https://crandell.io`.
+
 ## Deployment
 
 - **Vercel (frontend)**:
