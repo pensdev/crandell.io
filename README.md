@@ -90,13 +90,15 @@ cd .. && sudo nginx -t && sudo systemctl reload nginx   # if you changed nginx
 
 That mirrors `apps/web/out/` into the docroot nginx serves.
 
+The export uses **`trailingSlash: true`**, so routes are emitted as directories (for example `methodology/index.html`). Use links like `/methodology/` (or rely on nginx to resolve `/methodology` when `try_files $uri $uri/ =404` is set on `location /`). After adding pages, **rebuild and recopy** `out/` to the docroot or new routes will 404.
+
 **API on the same domain (fixes 404 HTML from nginx when moving sliders):** the UI POSTs to `https://crandell.io/simulate`. Nginx must **proxy** that to FastAPI.
 
 On the server: install [`deploy/snippets/crandell-api-proxy.conf`](deploy/snippets/crandell-api-proxy.conf) into `/etc/nginx/snippets/`, include it in your `server { }` block (before `location /`), copy [`deploy/policy-api.service`](deploy/policy-api.service) to `/etc/systemd/system/`, create a venv under `apps/api`, `pip install -r apps/api/requirements.txt`, point `ExecStart` at `.venv/bin/uvicorn`, then `sudo systemctl daemon-reload && sudo systemctl enable --now policy-api` and reload nginx.
 
 **Check:** `curl -sS https://crandell.io/health` → `{"status":"ok"}`.
 
-Set **`NEXT_PUBLIC_API_URL=https://crandell.io`** (or your site origin) **before** `npm run build` so the static export calls the API on the same host. If the API lives only on another machine, use that origin instead and add it to **`ALLOWED_ORIGINS`** on the API.
+The UI calls **`/simulate`** on the same origin by default (nginx proxies to FastAPI), so you do **not** need `NEXT_PUBLIC_API_URL` for that layout. Set **`NEXT_PUBLIC_API_URL`** only if the web app and API use different origins (then also add the web origin to **`ALLOWED_ORIGINS`** on the API). You can still set `NEXT_PUBLIC_API_URL=https://crandell.io` before `npm run build` if you want the displayed API base in the header to show the full URL.
 
 **Optional — API on Render or Fly.io** (frontend still on crandell.io): use [`apps/api/Dockerfile`](apps/api/Dockerfile) or [`apps/api/render.yaml`](apps/api/render.yaml). Set **`ALLOWED_ORIGINS`** to include `https://crandell.io` (and `https://www.crandell.io` if used). Point **`NEXT_PUBLIC_API_URL`** at that API URL when you build the static site.
 

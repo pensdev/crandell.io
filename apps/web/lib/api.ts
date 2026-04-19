@@ -1,9 +1,35 @@
 import type { SimulateRequest, SimulateResponse } from "./types";
 
-const DEFAULT_API = "http://127.0.0.1:8000";
+const DEFAULT_DEV_API = "http://127.0.0.1:8000";
 
+function envApiBase(): string {
+  return (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/$/, "");
+}
+
+/**
+ * Base URL for FastAPI. In production on the same host as the static site (nginx
+ * proxies `/simulate` to uvicorn), use same-origin relative URLs so a build
+ * without `NEXT_PUBLIC_API_URL` still works. Local dev continues to call
+ * `DEFAULT_DEV_API` unless `NEXT_PUBLIC_API_URL` is set.
+ */
 export function getApiBase(): string {
-  return (process.env.NEXT_PUBLIC_API_URL || DEFAULT_API).replace(/\/$/, "");
+  const fromEnv = envApiBase();
+
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    const isLocal =
+      host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+    if (isLocal) {
+      return fromEnv || DEFAULT_DEV_API;
+    }
+    // Deployed: explicit split-frontend/API URL wins (e.g. Vercel → Fly).
+    if (fromEnv) {
+      return fromEnv;
+    }
+    return "";
+  }
+
+  return fromEnv || DEFAULT_DEV_API;
 }
 
 export async function simulatePolicy(

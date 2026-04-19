@@ -217,25 +217,8 @@ export function HomeContent() {
     setPresetId(id);
   };
 
-  const missingPublicApiUrl =
-    process.env.NODE_ENV === "production" &&
-    !process.env.NEXT_PUBLIC_API_URL?.trim();
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
-      {missingPublicApiUrl ? (
-        <div
-          className="border-b border-amber-600/50 bg-amber-950/40 px-6 py-3 text-center text-sm text-amber-100"
-          role="status"
-        >
-          <strong className="font-semibold">Backend URL not set.</strong> Build
-          the site with{" "}
-          <code className="rounded bg-black/30 px-1">NEXT_PUBLIC_API_URL</code>{" "}
-          set to your public API origin (for crandell.io on the same server, use{" "}
-          <code className="rounded bg-black/30 px-1">https://crandell.io</code>
-          ), then copy the static export to your nginx docroot again.
-        </div>
-      ) : null}
       <header className="border-b border-slate-800 bg-slate-950/80 px-6 py-8">
         <div className="mx-auto max-w-6xl">
           <p className="text-sm font-medium uppercase tracking-wide text-sky-400">
@@ -255,7 +238,7 @@ export function HomeContent() {
           <p className="mt-4 text-sm">
             <Link
               className="text-sky-400 underline hover:text-sky-300"
-              href="/methodology"
+              href="/methodology/"
             >
               Methodology &amp; limitations
             </Link>
@@ -398,7 +381,7 @@ export function HomeContent() {
       <footer className="border-t border-slate-800 px-6 py-8 text-center text-xs text-slate-500">
         BLS / BEA / CBO-style magnitudes are rounded illustrations—see API{" "}
         <code className="rounded bg-slate-900 px-1">data/SOURCES.md</code>.{" "}
-        <Link className="text-sky-500 underline" href="/methodology">
+        <Link className="text-sky-500 underline" href="/methodology/">
           Methodology
         </Link>
       </footer>
