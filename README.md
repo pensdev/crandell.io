@@ -45,8 +45,11 @@ cd apps/web && npm test
 
 ## Deployment
 
-- **Vercel (frontend)**: set the project **Root Directory** to `apps/web`. Configure `NEXT_PUBLIC_API_URL` to your public API URL.
-- **Render / Fly.io (API)**: use [`apps/api/Dockerfile`](apps/api/Dockerfile) or [`apps/api/render.yaml`](apps/api/render.yaml). Set `ALLOWED_ORIGINS` to your Vercel domain (comma-separated if multiple).
+- **Vercel (frontend)**:
+  1. **Root Directory** must be **`apps/web`** (Project → Settings → General). If you import the repo root, Vercel will not find `next.config` / `package.json` for the app and the build will fail or produce the wrong output.
+  2. **Environment variables**: add **`NEXT_PUBLIC_API_URL`** = your public API base URL (no trailing slash), e.g. `https://policy-api.onrender.com`. Redeploy after saving.
+  3. **Preview URL shows `401 Unauthorized`**: that is usually **Deployment Protection** (team settings blocking unauthenticated access to preview deployments). Fix: Project → Settings → **Deployment Protection** → allow the deployment, **or** open the **Production** deployment URL instead of a preview alias, **or** sign in when Vercel prompts you.
+- **Render / Fly.io (API)**: use [`apps/api/Dockerfile`](apps/api/Dockerfile) or [`apps/api/render.yaml`](apps/api/render.yaml). Set **`ALLOWED_ORIGINS`** to your Vercel app origin(s), e.g. `https://your-app.vercel.app,https://crandell.io` (comma-separated, no spaces unless quoted per host).
 
 ## Data attribution
 
