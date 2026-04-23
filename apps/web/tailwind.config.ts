@@ -11,6 +11,14 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        "honey-void": "#0F0F0F",
+        honey: {
+          DEFAULT: "#F5C242",
+          bright: "#FFCC33",
+        },
+        "amber-deep": "#D4A017",
+        parchment: "#F8F1E9",
+        "honey-panel": "#141414",
       },
     },
   },
